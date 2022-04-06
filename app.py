@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
 import sqlite3 as s
 
 from werkzeug.utils import redirect
@@ -55,6 +55,8 @@ def dashboard():
                 '" + getDob + "', '" + getPlace + "', " + getPin + ")")
         connection.commit()
         print("Inserted Successfully")
+
+
 
         return redirect('/view')
 
@@ -114,7 +116,7 @@ def updation():
         connection.execute("UPDATE PATIENT SET NAME='"+getName+"', MOBILE='"+getMno+"', AGE="+getAge+",\
          ADDRESS='"+getAddress+"', DOB='"+getDob+"', PLACE='"+getPlace+"', PINCODE='"+getPin+"' WHERE MOBILE='"+getNMno+"'")
         connection.commit()
-        print("Updated Successfully")
+        print("Updated Successfully......")
 
         return redirect('/view')
 
@@ -132,5 +134,14 @@ def deletion():
     return render_template("delete.html")
 
 
+@App.route('/cardview')
+def cards():
+    cursor = connection.cursor()
+    count = cursor.execute("SELECT * FROM PATIENT")
+
+    result = cursor.fetchall()
+    return render_template("cards.html", patient=result)
+
+
 if __name__ == "__main__":
-    App.run()
+    App.run(debug=True)
