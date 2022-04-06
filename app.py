@@ -78,8 +78,14 @@ def search():
     if request.method == "POST":
         getMno = request.form["mno"]
         count = cursor.execute("SELECT * FROM PATIENT WHERE MOBILE="+getMno)
-    result = cursor.fetchall()
-    return render_template("search.html", search=result)
+        result = cursor.fetchall()
+        if result is None:
+            print("Mobile Number Not Exist")
+        else:
+            return render_template("search.html", search=result, status=True)
+    else:
+        return render_template("search.html", search=[], status=False)
+
 
 
 
